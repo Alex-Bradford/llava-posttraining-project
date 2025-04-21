@@ -18,30 +18,37 @@ Resource constraint: 10 hours of compute with a H100 Nvidia GPU.
 
 **Method:**
 
-Taking into account the resource constraint, I have used QLoRA to run SFT on top of the base model. I have tested 4 different QLoRA configurations:
-1. SFT1: r=16, alpha=16, dropout=0.05
-2. SFT2: r=16, alpha=8, dropout=0.05
-3. SFT3: r=16, alpha=16, dropout=0.10
-4. SFT4: r=16, alpha=8, dropout=0.10
+Taking into account the resource constraint, I have used QLoRA to run SFT on top of the base model. This means that all base model weights are frozen and only a low-rank adapter is added on top of the base model and trained. I have tested 4 different QLoRA configurations:
+- SFT1: r=16, alpha=16, dropout=0.05
+- SFT2: r=16, alpha=8, dropout=0.05
+- SFT3: r=16, alpha=16, dropout=0.10
+- SFT4: r=16, alpha=8, dropout=0.10
+- SFTe: an average of the above 4 model weights.
 
-Using a consistent *r* hyperparamer for the QLoRA config means that all 4 adapters have the same architecture, which will allow me to easily take an average of the weights across all 4 configurations to test what I denote the **SFTe** (short for SFT ensemble) model.
+Using a consistent *r* hyperparamer for the QLoRA config means that all 4 adapters have the same architecture, which will allow me to easily take an average of the weights across all 4 configurations to test what I denote the **SFTe** (short for SFT ensemble) model. The *alpha* hyperparam controls how much influence the adapter has on the final model output (higher = more influence), and the *dropout* hyperparam controls regularisation (higher = more regularisation).
 
-1. Using QLoRA, test 4 different configurations
+Then, I investigate if the model can self-critique without the need for fitting an explicit reward model. The specific process is:
+1. Generate 2 outputs for a given [image, prompt] pair
+2. Ask the SFTe model to pick the preferred response
+3. Use this [image, prompt, chosen, rejected] data to run DPO on the SFTe model.
 
-
-3. 
+I denote this model **SFTe_DPO**, since DPO training has been run on top of the SFT ensemble model.
 
 **Evaluation:**
 
-This project investigates the effect of various post-training strategies on **LLaVA-1.5 7B**, a strong open-source vision-language model.
+I use an AI critic to evaluate the responses for each model on the test set. In October 2024, the LLaVA project released the [LLaVA-Critic](https://llava-vl.github.io/blog/2024-10-03-llava-critic/) model which has been specifically trained on 113k [image, prompt, response A, response B, critic evaluation] datapoints to be a generalist VLM evaluator. I present the average score across all datapoints in the test set for each model.
 
-We develop and compare **three versions** of the model:
-1. **Base Model**: Zero-shot, no post-training
-2. **Benchmark Model**: Fine-tuned on curated instruction-image data using QLoRA
-3. **Improved Model**: Fine-tuned with architectural and data-centric enhancements + ablation studies
+For completeness, I also include the loss (on the test set), BLEU and ROUGE-L scores.
 
-The final results are summarized in a Google Slides presentation.
+**Results:**
 
+|                   | Base mod | SFT1   | SFT2    | SFT3    | SFT4    | SFTe    | SFTe_DPO |
+|-------------------|----------|--------|---------|---------|---------|---------|----------|
+| **Loss**          | 11.65    | **10.94**  | 11.38   | <u>11.11</u>   | 11.36   | 11.60   | 11.65    |
+| **BLEU**          | **0.1138**   | 0.077  | 0.1045  | 0.0817  | <u>0.1093</u>  | 0.0947  | 0.1005   |
+| **ROUGE‑L**       | **0.2885**   | 0.2409 | <u>0.2826</u>  | 0.2617  | 0.273   | 0.2791  | 0.2653   |
+| **Critic score**  | <u>41.34</u>    | 42.97  | 40.67   | 38.24   | 36.91   | **43.62**   | <u>41.35</u>    |
+<u>0.1045</u>
 ---
 
 ## 🏗️ Project Structure
