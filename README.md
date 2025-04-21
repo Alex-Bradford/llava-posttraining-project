@@ -64,7 +64,7 @@ With that out of the way, I move on to details of my specific project...
 
 ## 🧠 Project Overview
 
-Resource constraint: 10 hours of compute with a H100 Nvidia GPU.
+Resource constraint: 10 hours of compute with 1 NVIDIA H100 GPU.
 
 **Data:**
 - The LLaVA-1.5 model is already a post-trained VLM. I want to run SFT on unseen (although not out-of-scope) data at a manageable scale.
