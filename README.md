@@ -1,6 +1,24 @@
 # 🔍 Post-training open-source vision-language models with additional rounds of SFT, rejection sampling with self-critique, DPO and ablation studies.
 
+## 🧪 Research Question
+
+**Can we improve the performance of an already post-trained vision-language model (VLM) like LLaVA-1.5 with additional rounds of post-training including self-critique?**
+
+---
+
 ## 🧠 Project Overview
+
+**Data:**
+- The LLaVA-1.5 model is already a post-trained VLM. I want to run SFT on unseen (although not out-of-scope data).
+- The LLaVA project has compiled and shared the [LLaVA-OneVision-Data](https://huggingface.co/datasets/lmms-lab/LLaVA-OneVision-Data) in Aug 2024, it is a collection of 3.7m [image, prompt, response] triplets which they use for training.
+- There is a subset of it called LRV Chart (1.8k rows), which I use as my dataset. I split this into train (1.6k) and test (0.2k).
+- LLaVA 1.5 model was released in Oct 2023, and the specific LRV Chart subset was not mentioned as included data in te LLaVA-1.5 paper, so I believe this specific subset is unseen by the model.
+
+
+
+**Method:**
+
+**Evaluation:**
 
 This project investigates the effect of various post-training strategies on **LLaVA-1.5 7B**, a strong open-source vision-language model.
 
@@ -10,12 +28,6 @@ We develop and compare **three versions** of the model:
 3. **Improved Model**: Fine-tuned with architectural and data-centric enhancements + ablation studies
 
 The final results are summarized in a Google Slides presentation.
-
----
-
-## 🧪 Research Question
-
-**Can we improve the performance of an already post-trained vision-language model (VLM) like LLaVA-1.5 with additional rounds of post-training including self-critique?**
 
 ---
 
