@@ -50,65 +50,22 @@ A few key observations:
 - Despite the including the weaker models (SFT3 and SFT4) in the SFT ensemble, it still produced the best performance. Model averaging looks promising.
 - The additional round of DPO led to degraded performance. It seems the LLaVA-1.5-7b model (with additional SFTe layer) is not powerful enough to critique itself and add value with additional DPO rounds. I would be interested to see if the same effect occurred for larger, more powerful models.
 
-
 ---
 
-## 🏗️ Project Structure
+## 🚀 Steps to Reproduce Results
 
-| Milestone | Description |
-|----------|-------------|
-| 1 | Setup & baseline inference on LLaVA-1.5 |
-| 2 | Curation of a high-quality multimodal dataset |
-| 3 | QLoRA fine-tuning to create the benchmark model |
-| 4 | Evaluation suite: prompts, rubric, auto-grading |
-| 5 | Improved model: ablation studies + new techniques |
-| 6 | Final evaluation and comparison of all 3 models |
+Infrastructure required: 1 NVIDIA H100 GPU
 
----
+The below steps consume ~5hrs of compute time with 1 NVIDIA H100 GPU.
 
-## 📁 Dataset
-
-- ~1000 instruction-image-response triplets
-- Topics include: cooking, repair, travel, fashion, everyday objects
-- Formats: JSON (structured), PNG/JPEG (image)
-- Metadata: domain, ambiguity score, prompt type
-
----
-
-## 🧪 Evaluation Suite
-
-We created a held-out test set of 100 examples, scored using:
-- ✅ Correctness
-- 🧭 Steerability
-- 💬 Helpfulness
-- ❌ Hallucination Avoidance
-- ⚠️ Safety/Refusal when appropriate
-
-Scores were generated using a combination of:
-- GPT-4 scoring (auto-eval)
-- Manual review on a small subset
-- Visualization: bar charts, side-by-sides
-
----
-
-## 🛠️ Tools & Libraries
-
-| Category         | Tools / Frameworks                        |
-|------------------|-------------------------------------------|
-| Model            | `llava-hf/llava-1.5-7b-hf`                |
-| Fine-tuning      | `transformers`, `peft`, `bitsandbytes`    |
-| Data prep        | `datasets`, `Pillow`, `OpenAI`            |
-| Logging          | `Weights & Biases`                        |
-| Evaluation       | `pandas`, `matplotlib`, `OpenAI GPT-4`    |
-| Slides           | Google Slides (exported backup in `/slides`) |
-
----
-
-## 📌 Acknowledgments
-
-- LLaVA GitHub Repo
-- Hugging Face Transformers
-- OpenAI GPT-4 (for evaluation)
+Steps to reproduce:
+1. Create a env with Python 3.10 and the packages detailed in requirements.txt
+2. Clone the repo.
+3. Run 4 of your chosen SFT configurations using scripts.training.train_SFT_model.py, ensure all 4 models have the same *r* param for model averaging later on.
+4. Run scripts.training.create_SFTe_model.py to create the SFTe model.
+5. Run the scripts.training.train_DPO_model.py to generate the samples from the SFTe model, then again use SFTe to pick the preferred response, then run DPO on top of SFTe using that newly created preference data.
+6. Run scripts.evaluation.generate_test_responses_and_metrics.py to generate responses for all models on the test set.
+7. Run scripts.evaluation.evaluate_with_critic.py to calculate the critic scores.
 
 ---
 
@@ -117,28 +74,3 @@ Scores were generated using a combination of:
 Built by Alex Bradford
 
 ---
-
-## 🚀 Setup instructions
-
-# Create a new conda env with Python 3.10
-conda create -n llava-env python=3.10
-conda activate llava-env
-# Install PyTorch with correct CUDA (e.g., 12.1)
-conda install pytorch torchvision torchaudio pytorch-cuda=12.1 -c pytorch -c nvidia
-# Add Hugging Face and other dependencies
-pip install transformers accelerate peft bitsandbytes matplotlib pillow
-
-
-
-
-# Run base model inference
-python notebooks/01_base_inference.ipynb
-
-# Fine-tune benchmark model
-python scripts/train_benchmark.py --config configs/benchmark.yaml
-
-# Run evaluation
-python scripts/evaluate.py --model benchmark
-
-# Fine-tune improved model
-python scripts/train_improved.py --config configs/improved_loss.yaml
