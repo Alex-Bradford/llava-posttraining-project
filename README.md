@@ -4,7 +4,7 @@
 
 Before I dive into my specific project, I wanted to present my high level takeaways from reading each series of Llama, Qwen, DeepSeek, BLIP-2, and LLaVA (an open-source vision-language model) papers. I focussed on avenues for future research in post-training to create the best vision-language model. 
 
-Tasks: Assume you are starting with a very powerful, pre-trained image encoder and LLM. Now, we want to create an adapter to connect their features/embeddings/encodings. How would you do it?
+<ins>Task</ins>: Assume you are starting with a very powerful, pre-trained image encoder and LLM. Now, we want to create an adapter to connect their features/embeddings/encodings. How would you do it?
 
 ### Data
 
