@@ -1,5 +1,19 @@
 # 🔍 Post-training open-source vision-language models with additional rounds of SFT, rejection sampling with self-critique, DPO and ablation studies.
 
+## 🧑‍💻 Review of Existing Work
+
+Before I dive into my specific project, I wanted to present my high level takeaways from reading each series of Llama, Qwen, DeepSeek, BLIP-2, and LLaVA (an open-source vision-language model) papers. I focussed on avenues for future research to create the best vision-language model. 
+- Assume you are starting with a very powerful, pre-trained image encoder and LLM. Now, we want to create an adapter to connect their features/embeddings/encodings.
+
+### Data
+
+xyz
+
+### Architecture
+
+xyz
+
+
 ## 🧪 Research Question
 
 **Can we improve the performance of an already post-trained vision-language model (VLM) like LLaVA-1.5 with additional rounds of post-training including self-critique?**
