@@ -2,16 +2,33 @@
 
 ## 🧑‍💻 Review of Existing Work
 
-Before I dive into my specific project, I wanted to present my high level takeaways from reading each series of Llama, Qwen, DeepSeek, BLIP-2, and LLaVA (an open-source vision-language model) papers. I focussed on avenues for future research to create the best vision-language model. 
-- Assume you are starting with a very powerful, pre-trained image encoder and LLM. Now, we want to create an adapter to connect their features/embeddings/encodings.
+Before I dive into my specific project, I wanted to present my high level takeaways from reading each series of Llama, Qwen, DeepSeek, BLIP-2, and LLaVA (an open-source vision-language model) papers. I focussed on avenues for future research in post-training to create the best vision-language model. 
+
+Tasks: Assume you are starting with a very powerful, pre-trained image encoder and LLM. Now, we want to create an adapter to connect their features/embeddings/encodings. How would you do it?
 
 ### Data
 
-xyz
+- For both pre-training and post-training, you want high density and diverse data. You could spend a lot of time optimising the deduplication, filtering and remixing strategies.
+- A lot of papers just say “we improve the data” but the devil is really in the detail I would expect. Llama 3 had some good details on their exact methods.
+- Post-training: optimise for real user prompts - make use of real user prompts, augment with AI to generate additional synthetic data.
+    - Again, you want high density and diverse data. Dedup, filter, remix.
+    - Additional sources: Academic datasets and high quality, human curated examples
+
 
 ### Architecture
 
-xyz
+Take inspiration from:
+- Flamingo: 
+    - MLP to convert image tokens to same dimension as text tokens
+    - Cross-attention layers to relate image tokens to text tokens
+    - Allows image and text tokens to interleave in a prompt
+- BLIP:
+    - Additional loss functions could have potential
+- MoE / Sparse models:
+    - Investigate using MoE architecture for that adapter, maybe there’s a different expert for different tasks:
+        - Image type: document, nature, inside setting, humans, etc.
+        - Prompt type: general, creative, math, coding, etc.
+
 
 
 ## 🧪 Research Question
