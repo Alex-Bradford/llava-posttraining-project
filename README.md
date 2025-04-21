@@ -14,7 +14,6 @@ Before I dive into my specific project, I wanted to present my high level takeaw
     - Again, you want high density and diverse data. Dedup, filter, remix.
     - Additional sources: Academic datasets and high quality, human curated examples
 
-
 ### Architecture
 
 Take inspiration from:
@@ -24,19 +23,19 @@ Take inspiration from:
     - Allows image and text tokens to interleave in a prompt
 - BLIP:
     - Additional loss functions could have potential
-- MoE / Sparse models:
-    - Investigate using MoE architecture for that adapter, maybe there’s a different expert for different tasks:
+- <ins>MoE / Sparse models</ins>:
+    - Investigate using MoE architecture for that adapter, maybe it makes sense that there is a different expert for different tasks (and their combinations:
         - Image type: document, nature, indoor setting, human recognition, etc.
         - Prompt type: general, creative, math, coding, etc.
      
 ### Pre-training the ViT-LLM adapter
 
 - Data: focus on quality and breadth (probably same data as used in the image encoder). You want descriptive image-text pairs (not just 1 line text description).
-- Training recipe considerations: simple vs complicated (eg. BLIP-2 has a complicated training recipe, can you make use of any ideas from that?)
+- Training recipe considerations: simple vs complicated (eg. <ins>BLIP-2 has a complicated training recipe, can you make use of any ideas from that?</ins>)
 
 ### Post-training the ViT-LLM adapter
 
-2 potential methods:
+<ins>2 potential methods</ins>:
 1. Post-train the adapter and freeze all other params, or
 2. Lock everything except for the LLM, to focus on instruction following (same approach as done by Qwen2-VL (Oct 2024))
 
@@ -44,12 +43,14 @@ Training recipe considerations:
 - SFT
 - Train a reward model/critic with human annotated preference data
 - Rejection sampling, winner chosen with critic, DPO
-- Model averaging
+- <ins>Model averaging</ins>
     - Llama 3: Use model averaging across various checkpoints sourced from the RM, SFT and DPO stages (across various versions of data and hyper params).
         - Eg. You may have 10 versions of the RM trained with different data and hyperparams. Same for SFT and DPO. Average the weights across all 30 models.
     - This is a similar concept to the residual connections in the transformer block (eg. position encoded values are added back to the output from the attention mechanism, even though they were input into the attention mechanism).
+ 
+### System prompting
 
-
+<ins>Can we explore any behind-the-scenes system prompting logic to better guide the model to generating better responses?</ins>
 
 
 ## 🧪 Research Question
