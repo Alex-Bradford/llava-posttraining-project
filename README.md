@@ -10,7 +10,7 @@ Before I dive into my specific project, I wanted to present my high level takeaw
 
 - For both pre-training and post-training, you want high density and diverse data. You could spend a lot of time optimising the deduplication, filtering and remixing strategies.
 - A lot of papers just say “we improve the data” but the devil is really in the detail I would expect. Llama 3 had some good details on their exact methods.
-- Post-training: optimise for real user prompts - make use of real user prompts, augment with AI to generate additional synthetic data.
+- Post-training: optimise for real user prompts - make use of real user prompt data and augment with AI to generate additional synthetic data.
     - Again, you want high density and diverse data. Dedup, filter, remix.
     - Additional sources: Academic datasets and high quality, human curated examples
 
@@ -26,18 +26,18 @@ Take inspiration from:
     - Additional loss functions could have potential
 - MoE / Sparse models:
     - Investigate using MoE architecture for that adapter, maybe there’s a different expert for different tasks:
-        - Image type: document, nature, inside setting, humans, etc.
+        - Image type: document, nature, indoor setting, human recognition, etc.
         - Prompt type: general, creative, math, coding, etc.
      
 ### Pre-training the ViT-LLM adapter
 
 - Data: focus on quality and breadth (probably same data as used in the image encoder). You want descriptive image-text pairs (not just 1 line text description).
-- Training recipe: simple vs complicated (BLIP-2)
+- Training recipe considerations: simple vs complicated (eg. BLIP-2 has a complicated training recipe, can you make use of any ideas from that?)
 
 ### Post-training the ViT-LLM adapter
 
 2 potential methods:
-1. Post-train the adapter, or
+1. Post-train the adapter and freeze all other params, or
 2. Lock everything except for the LLM, to focus on instruction following (same approach as done by Qwen2-VL (Oct 2024))
 
 Training recipe considerations:
