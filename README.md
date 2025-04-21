@@ -38,16 +38,19 @@ I denote this model **SFTe_DPO**, since DPO training has been run on top of the 
 
 I use an AI critic to evaluate the responses for each model on the test set. In October 2024, the LLaVA project released the [LLaVA-Critic](https://llava-vl.github.io/blog/2024-10-03-llava-critic/) model which has been specifically trained on 113k [image, prompt, response A, response B, critic evaluation] datapoints to be a generalist VLM evaluator. I present the average score across all datapoints in the test set for each model.
 
-For completeness, I also include the loss (on the test set), BLEU and ROUGE-L scores.
-
 **Results:**
 
 |                   | Base mod | SFT1   | SFT2    | SFT3    | SFT4    | SFTe    | SFTe_DPO |
 |-------------------|----------|--------|---------|---------|---------|---------|----------|
-| **Loss**          | 11.65    | **10.94**  | 11.38   | 11.11  | 11.36   | 11.60   | 11.65    |
-| **BLEU**          | **0.1138**   | 0.077  | 0.1045  | 0.0817  | 0.1093  | 0.0947  | 0.1005   |
-| **ROUGE‑L**       | **0.2885**   | 0.2409 | 0.2826  | 0.2617  | 0.273   | 0.2791  | 0.2653   |
 | **Critic score**  | 41.34   | 42.97  | 40.67   | 38.24   | 36.91   | **43.62**   | 41.35    |
+
+A few key observations:
+- The higher *dropout* used in SFT1 vs SFT3 and SFT2 vs SFT4 led to degraded the performance.
+- The higher *alpha* used in SFT3 vs SFT4 and SFT1 vs SFT2 led to increased performance.
+- Despite the including the weaker models (SFT3 and SFT4) in the SFT ensemble, it still produced the best performance. Model averaging looks promising.
+- The additional round of DPO led to degraded performance. It seems the LLaVA-1.5-7b model (with additional SFTe layer) is not powerful enough to critique itself and add value with additional DPO rounds. I would be interested to see if the same effect occurred for larger, more powerful models.
+
+
 ---
 
 ## 🏗️ Project Structure
