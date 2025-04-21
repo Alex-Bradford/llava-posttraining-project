@@ -8,15 +8,27 @@
 
 ## 🧠 Project Overview
 
+Resource constraint: 10 hours of compute with a H100 Nvidia GPU.
+
 **Data:**
-- The LLaVA-1.5 model is already a post-trained VLM. I want to run SFT on unseen (although not out-of-scope data).
+- The LLaVA-1.5 model is already a post-trained VLM. I want to run SFT on unseen (although not out-of-scope) data at a manageable scale.
 - The LLaVA project has compiled and shared the [LLaVA-OneVision-Data](https://huggingface.co/datasets/lmms-lab/LLaVA-OneVision-Data) in Aug 2024, it is a collection of 3.7m [image, prompt, response] triplets which they use for training.
 - There is a subset of it called LRV Chart (1.8k rows), which I use as my dataset. I split this into train (1.6k) and test (0.2k).
 - LLaVA 1.5 model was released in Oct 2023, and the specific LRV Chart subset was not mentioned as included data in te LLaVA-1.5 paper, so I believe this specific subset is unseen by the model.
 
-
-
 **Method:**
+Taking into account the resource constraint, I have used QLoRA to run SFT on top of the base model. I have tested 4 different QLoRA configurations:
+1. SFT1: r=16, alpha=16, dropout=0.05
+2. SFT2: r=16, alpha=8, dropout=0.05
+3. SFT3: r=16, alpha=16, dropout=0.10
+4. SFT4: r=16, alpha=8, dropout=0.10
+
+Using a consistent *r* hyperparamer for the QLoRA config means that all 4 adapters have the same architecture, which will allow me to easily take an average of the weights across all 4 configurations to test what I denote the **SFTe** (short for SFT ensemble) model.
+
+1. Using QLoRA, test 4 different configurations
+
+
+3. 
 
 **Evaluation:**
 
