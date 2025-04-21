@@ -17,6 +17,7 @@ Resource constraint: 10 hours of compute with a H100 Nvidia GPU.
 - LLaVA 1.5 model was released in Oct 2023, and the specific LRV Chart subset was not mentioned as included data in te LLaVA-1.5 paper, so I believe this specific subset is unseen by the model.
 
 **Method:**
+
 Taking into account the resource constraint, I have used QLoRA to run SFT on top of the base model. I have tested 4 different QLoRA configurations:
 1. SFT1: r=16, alpha=16, dropout=0.05
 2. SFT2: r=16, alpha=8, dropout=0.05
