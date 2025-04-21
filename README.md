@@ -28,6 +28,27 @@ Take inspiration from:
     - Investigate using MoE architecture for that adapter, maybe there’s a different expert for different tasks:
         - Image type: document, nature, inside setting, humans, etc.
         - Prompt type: general, creative, math, coding, etc.
+     
+### Pre-training the ViT-LLM adapter
+
+- Data: focus on quality and breadth (probably same data as used in the image encoder). You want descriptive image-text pairs (not just 1 line text description).
+- Training recipe: simple vs complicated (BLIP-2)
+
+### Post-training the ViT-LLM adapter
+
+2 potential methods:
+1. Post-train the adapter, or
+2. Lock everything except for the LLM, to focus on instruction following (same approach as done by Qwen2-VL (Oct 2024))
+
+Training recipe considerations:
+- SFT
+- Train a reward model/critic with human annotated preference data
+- Rejection sampling, winner chosen with critic, DPO
+- Model averaging
+    - Llama 3: Use model averaging across various checkpoints sourced from the RM, SFT and DPO stages (across various versions of data and hyper params).
+        - Eg. You may have 10 versions of the RM trained with different data and hyperparams. Same for SFT and DPO. Average the weights across all 30 models.
+    - This is a similar concept to the residual connections in the transformer block (eg. position encoded values are added back to the output from the attention mechanism, even though they were input into the attention mechanism).
+
 
 
 
