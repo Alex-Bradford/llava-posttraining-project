@@ -69,6 +69,38 @@ Steps to reproduce:
 
 ---
 
+## Future Work
+
+### 1. Enhanced Post‑Training
+- I’ve used QLoRA to do SFT and then DPO on the same adapter.  
+- **Next step:** update **all model parameters**, not just the QLoRA adapter, for more powerful fine‑tuning.
+
+### 2. Data Improvements
+- Increase data **quality** (cleaner, better‑annotated examples).  
+- Broaden data **breadth** (diverse image–text domains, more edge cases).
+
+### 3. Holistic LLaVA Architecture
+- LLaVA currently glues together a pre‑trained LLM + frozen ViT via an MLP adapter on instruction data.  
+- **Idea:** swap or augment this adapter with more advanced designs:
+  - **Llama 3 / Qwen2‑VL** style cross‑attention:  
+    - Insert image tokens via cross‑attention every 4th self‑attention layer.  
+    - Pre‑trained on massive image–text & grounding datasets (→400 B→500 B params).
+  - **BLIP‑2** “Q‑Former”:  
+    - Q‑former layers + extra loss functions on diverse image–text corpora.
+  - **Flamingo** interleaved tokens:  
+    - Project image tokens into text embedding space.  
+    - Trainable cross‑attention & projection matrices on varied multimodal data.
+
+### 4. Scale & Specialized Adapters
+- **Scale up** the adapter (more heads, wider MLPs) to boost capacity.  
+- **Mixture‑of‑Experts (MoE) adapter:** different experts for charts vs. documents vs. landscapes, etc.
+
+### 5. Model Averaging
+- **Checkpoint ensemble:** average weights across multiple SFT & DPO checkpoints (varied data/hyperparams).  
+- Acts like residual connections: lets attention layers focus on attention, not on “remembering” position encodings.
+
+---
+
 ## 🧑‍💻 Author
 
 Built by Alex Bradford
