@@ -53,6 +53,9 @@ Training recipe considerations:
 <ins>Can we explore any behind-the-scenes system prompting logic to better guide the model to generating better responses?</ins>
 
 
+
+With that out of the way, I move on to details of my specific project...
+
 ## 🧪 Research Question
 
 **Can we improve the performance of an already post-trained vision-language model (VLM) like LLaVA-1.5 with additional rounds of post-training including self-critique?**
