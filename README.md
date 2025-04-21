@@ -79,25 +79,15 @@ Steps to reproduce:
 - Increase data **quality** (cleaner, better‑annotated examples).  
 - Broaden data **breadth** (diverse image–text domains, more edge cases).
 
-### 3. Holistic LLaVA Architecture
-- LLaVA currently glues together a pre‑trained LLM + frozen ViT via an MLP adapter on instruction data.  
-- **Idea:** swap or augment this adapter with more advanced designs:
-  - **Llama 3 / Qwen2‑VL** style cross‑attention:  
-    - Insert image tokens via cross‑attention every 4th self‑attention layer.  
-    - Pre‑trained on massive image–text & grounding datasets (→400 B→500 B params).
-  - **BLIP‑2** “Q‑Former”:  
-    - Q‑former layers + extra loss functions on diverse image–text corpora.
-  - **Flamingo** interleaved tokens:  
-    - Project image tokens into text embedding space.  
-    - Trainable cross‑attention & projection matrices on varied multimodal data.
-
-### 4. Scale & Specialized Adapters
-- **Scale up** the adapter (more heads, wider MLPs) to boost capacity.  
-- **Mixture‑of‑Experts (MoE) adapter:** different experts for charts vs. documents vs. landscapes, etc.
-
-### 5. Model Averaging
-- **Checkpoint ensemble:** average weights across multiple SFT & DPO checkpoints (varied data/hyperparams).  
-- Acts like residual connections: lets attention layers focus on attention, not on “remembering” position encodings.
+### 3. Zooming out, considering the entire LLaVA model
+- They glue together a pre-trained LLM and a pre-trained ViT, by post-training an MLP adapter on instruction data. It’s simple and appears to work well. But perhaps some combination of the BLIP-2/Flamingo adapter is more powerful.
+    - Llama 3 (and Qwen2-VL) weaves in the image encoded tokens into the VLM by using cross-attention layers after every 4th layer of self-attention in the LLM. For Llama 3, this increases the model params from 400B to 500B (eg. extra 100B params). Llama 3 runs pre-training on these cross-attention layers. Eg. they are trained on more than just instruction data (lots of image-text pairs, visual grounding data, screenshot parsing, some question-answer pairs, etc.)
+    - BLIP-2 is very similar to Llama 3, but they use a “Q-Former” (instead of just cross-attention) and additional loss functions. Trained on more than just instruction data.
+    - Flamingo is similar again, they allow for interleaved images and text prompts as they treat/inject/project an image token into the same dimensions as the text token. Again, they have a frozen LLM and frozen ViT, but they have trainable cross-attention layers and trainable projection matrices. They use more than just instruction data too. 
+- Increase the scale of this adapter to make it more powerful
+- Architecture and loss functions: consider a more sophisticated connection between the LLM and ViT (eg. BLIP-2)
+- MoE adaptor, various experts for different tasks? (Charts vs landscape vs document, etc.?)
+- Model averaging: average the weights across numerous checkpoints  eg. different SFT & DPO stages trained with various versions of data/hyperparams. (similar idea to residual connections in a transformer block, eg. allows the attention mechanism to solely focus on attention, instead of trying to maintain the position encoding too). 
 
 ---
 
