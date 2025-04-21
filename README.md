@@ -1,8 +1,4 @@
-# 🔍 Post-Training LLaVA-1.5 for Real-World Task Understanding
-
-A research-style portfolio project exploring how to improve the instruction-following capabilities of vision-language models through post-training, evaluation, and ablation.
-
----
+# 🔍 Post-training open-source vision-language models with additional rounds of SFT, rejection sampling with self-critique, DPO and ablation studies.
 
 ## 🧠 Project Overview
 
