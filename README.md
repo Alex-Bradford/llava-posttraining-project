@@ -15,7 +15,7 @@ The final results are summarized in a Google Slides presentation.
 
 ## 🧪 Research Question
 
-**Can we enhance the instruction-following and visual reasoning capabilities of a VLM like LLaVA-1.5 using principled fine-tuning methods and targeted improvements — and quantify those gains through fair, task-aligned evaluation?**
+**Can we improve the performance of an already post-trained vision-language model (VLM) like LLaVA-1.5 with additional rounds of post-training including self-critique?**
 
 ---
 
